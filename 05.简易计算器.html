@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="d1">
+        <select v-model="opt">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+        <input type="text" v-model="d2" >
+        <input type="button" value="=" @click="show">
+        <input type="text" :value="result">
+    </div>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                d1:0,
+                d2:0,
+                opt:"+",
+                result:0
+            },
+            methods:{
+                show(){
+                    // switch (this.opt) {
+                    //     case "+":
+                    //         this.result = parseInt(this.d1) + parseInt(this.d2);
+                    //         break;
+                    //     case "-":
+                    //         this.result = parseInt(this.d1) - parseInt(this.d2);
+                    //         break;
+                    //     case "*":
+                    //         this.result = parseInt(this.d1) * parseInt(this.d2);
+                    //         break;
+                    //     case "/":
+                    //         this.result = parseInt(this.d1) / parseInt(this.d2);
+                    //         break;
+                    // }
+
+                    // 注意 巧用了eval函数，现实开发中少用此方法
+                    var  codeStr = "parseInt(this.d1)"+this.opt + parseInt(this.d2);
+                    this.result = eval(codeStr);
+
+                }
+            }
+        });
+    </script>
+</body>
+</html>
