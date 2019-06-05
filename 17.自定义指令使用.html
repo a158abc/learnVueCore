@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/vue.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.css" />
+</head>
+<body>
+    <div id="app">
+        <label for="" class="form-inline">
+            搜索关键字：
+<!--            注意：vue中所有的指令 在调用的时候 都是以v- 开头-->
+<!--             如果此处的blue不加引号，会去vue中的date下面找blue-->
+            <input type="text" value="请输入：" class="form-control"  v-model="msg" v-focus  v-color="'blue'" >
+            <p v-fontweight="10" v-fontsize="10">用于对比指令v-fontweight,v-fontsize</p>
+            <p v-fontweight="600" v-fontsize="50">用于对比指令v-fontweight,v-fontsize</p>
+        </label>
+    </div>
+    <script>
+        //使用vue.directive() 定义全局指令  v-focus
+        //其中：参数1：指令名称，注意，定义的时候，指令的名称前面，不需要加v-前缀
+        //但是，在调用的时候，必须 在指令名称前 加上 v-前缀来进行调用
+        // 参数2： 是一个对象，在这个对象上，有一些指令相关的函数，这些函数，可以在特定的阶段执行相关操作
+        Vue.directive("focus",{
+            bind:function(el) { //每当指令绑定到元素上的时候，会立即执行这个bind函数，只执行一次
+                //注意：在每个 函数中，第一个参数 永远是el，表示 被绑定了指令的那个元素，这个el参数，是一个原生的js对象
+                // 在 元素 刚绑定了指令的时候，还没有插入到DOM中，这时候，调用focus方法没有作业
+                // 因为 一个元素，只有插入DOM之后，才能获取焦点。
+                //el.focus();
+            },
+            inserted:function(el){ //表示元素插入DOM中的时候，执行inserted函数， 触发一次
+                el.focus(); // 获取焦点
+                //和JS行为相关的操作，最后在inserted中去执行，防止js行为不生效
+            },
+            updated:function(el){ // 当vnode 更新的时候，会执行updated，可能执行多次
+
+            }
+        });
+
+        //自定义一个设置字体颜色的指令
+        Vue.directive("color",{
+            // 样式，只要通过指令绑定给了元素，不管这个元素有没有被插入到页面中，这个元素肯定有了一个内联的样式，
+            // 将来元素肯定会显示到页面中，这时候，浏览器渲染引擎必然会解析样式，应用给这个元素
+            bind:function (el,binding) {
+              //  el.style.color = 'red';
+
+              //   console.log(binding.name);
+              //   console.log(binding.value);
+              //   console.log(binding.expression);
+                el.style.color = binding.value;
+
+            },
+            inserted:function (el) {
+
+            }
+        });
+
+
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                msg:""
+            },
+            methods:{
+
+            },
+            directives:{ //自定义私有指令
+                "fontweight":{
+                    bind:function (el,binding) {
+                        el.style.fontWeight = binding.value;
+                    }
+                },
+                 "fontsize":function (el,binding) { //注意；这是自定义指令的简写  这个function等同于把代码写到 bind和 updated中
+                    el.style.fontSize = parseInt(binding.value)+"px";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
