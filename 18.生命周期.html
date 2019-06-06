@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="修改msg" @click="msg='no'">
+        <h3 id="h3">{{ msg }}</h3>
+    </div>
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                msg:"ok"
+            },
+            methods:{
+                show(){
+                    console.log("执行了show方法")
+                }
+            },
+            beforeCreate(){ //这是第一个生命周期函数，表示实例完成被创建出来之前会执行
+               // console.log(this.msg);//undefined
+               // console.log(this.show());//报错
+                //注意：在beforeCreate生命周期函数执行的时候，data和methods中的数据都还没有初始化
+
+            },
+            created(){// 这是遇到第二个生命周期函数
+               //  console.log(this.msg);//ok
+               //   console.log(this.show());//执行了show方法
+                 // 在created()中，data和methods都已经被初始化完成
+                // 如果要调用methods中的方法，或者操作data中的数据，最早只能在created()中
+            },
+            beforeMount(){ //这是遇到的第三个生命周期函数，表示模板已经在内存中编译完成，尚未把模板渲染到页面，此时页面还是旧的
+               // console.log(document.getElementById("h3").innerText); //{{msg}}
+                // 在beforeMount执行的时候，页面中的元素，还没有被真正替换过来，只是之前写的一些模板字符串
+            },
+            mounted(){ //这是遇到的第四个生命周期函数 表示，内存中的模板已经真实的挂载到页面中，用户可以看到渲染后的页面
+                      //如果要通过某些插件操作页面上的DOM节点，最早要在mounted中进行
+               // console.log(document.getElementById("h3").innerText);// ok
+                //注意：mounted()是实例创建期间的最后 一个生命周期函数，当执行完成mounted就表示实例已经完成被创建好了，
+                //此时，如果没有其他操作，这个实例就静静的躺在内存中
+                //只要执行完成mounted（）就表示整个vue实例已经被初始化完毕;此时组件脱离了创建阶段，进入到了进行阶段
+            },
+            beforeUpdate(){ //这是组件运行阶段最早的函数，会根据data数据改变，触发0次或多次
+                //这个时候表示我们的界面还没有被更新，【数据更新了么？数据肯定更新了】
+              //  console.log("界面上的元素内容："+document.getElementById("h3").innerText);// ok
+              //  console.log("data中的数据内容："+this.msg); //no
+                //得出结论：当执行beforeUpdate的时候，界面上显示的数据还是旧的，此时data数据是最新的，页面尚未和data最新数据保持同步
+            },
+            updated(){
+                //  console.log("界面上的元素内容："+document.getElementById("h3").innerText);// no
+                //  console.log("data中的数据内容："+this.msg); //no
+                // updated执行的时候，页面和data数据已经同步了，都是最新的
+            },
+            beforeDestroy(){
+                //当执行此函，表示实例已经从运行阶段进入到销毁阶段，
+                //当执行beforeDestroy的时候，实例身上的所有data和methods，以及过滤器，指令等 都处于可用状态，还没有到真正销毁的过程
+            },
+            destroyed(){
+                //当destroyed函数，组件已经被完全销毁，此时组件上所有数据，方法等不可用
+            }
+        });
+    </script>
+</body>
+</html>
