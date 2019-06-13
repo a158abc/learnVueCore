@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <!--注意：vue-resource.js依赖vue，所以注意先后顺序-->
+    <script src="./lib/vue-resource.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.css" />
+</head>
+<body>
+    <div id="app">
+       
+       <div class="panel panel-primary">
+           <div class="panel-heading">
+              添加品牌
+           </div>
+           <div class="panel-body form-inline">
+                <label>Name:
+                    <input type="text" class="form-control" v-model="name">
+                </label>
+                <input type="button" value="添加" class="btn btn-primary" @click="add()">
+           </div>
+       </div>
+       
+       <table class="table table-hover table-bordered table-striped">
+           <thead>
+               <tr>
+                   <th>Id</th>
+                   <th>Name</th>
+                   <th>Ctime</th>
+                   <th>OPeration</th>
+               </tr>
+           </thead>
+           <tbody>
+               <tr v-for="(item,i) in list" :key="item.ID">
+                   <td>{{item.ID}}</td>
+                   <td>{{item.NAME}}</td>
+                   <td>{{item.CTIME}}</td>
+                   <td><a href="" @click.prevent="del(i)">删除</a></td>
+               </tr>
+           </tbody>
+       </table>
+       
+
+    </div>
+
+
+    <script>
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                name:"",
+                list:[
+                    {ID:1,NAME:"红旗",CTIME:new Date()}
+                ]               
+            },
+            methods:{
+               getAllList(){//由于已经导入了vue-resource这个包，所以，可以通过可以通过this.$http发起请求
+                    this.$http.get("http://localhost:3000/api/getallbrand").then(result=>{
+                        //通过this.$http获取的数据 都在result.body中放着
+                        var info = result.body;
+                        if(info.success ==0)
+                        {
+                            console.log(info.result);
+                            this.list = info.result;
+                        }else{
+                            console.log("未取得数据！")
+                        }
+                    });
+               }, 
+               add(){
+                    this.$http.post("http://localhost:3000/api/addbrand",{name:this.name},{emulateJSON:true}).then(result=>{
+
+                    });
+               },
+               del(i){
+
+               }
+            },
+            created() { //vm实例的data和methods初始化完成，vm实例会自动执行created这个生命周期函数
+                this.getAllList();
+            },
+        });
+    </script>
+</body>
+</html>
+
