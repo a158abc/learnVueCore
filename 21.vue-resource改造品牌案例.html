@@ -39,7 +39,7 @@
                    <td>{{item.ID}}</td>
                    <td>{{item.NAME}}</td>
                    <td>{{item.CTIME}}</td>
-                   <td><a href="" @click.prevent="del(i)">删除</a></td>
+                   <td><a href="" @click.prevent="del(item.ID)">删除</a></td>
                </tr>
            </tbody>
        </table>
@@ -49,6 +49,12 @@
 
 
     <script>
+        //如果我们通过全局配置，请求的数据接口 根路径 则每次发起http请求，请求的路径url 应该以相对路径开头
+        // 前面不带 / 否则会启动根路径做拼接
+        Vue.http.options.root="http://localhost:3000/";
+
+        Vue.http.options.emulateJSON = true;
+
         var vm = new Vue({
             el:"#app",
             data:{
@@ -59,7 +65,7 @@
             },
             methods:{
                getAllList(){//由于已经导入了vue-resource这个包，所以，可以通过可以通过this.$http发起请求
-                    this.$http.get("http://localhost:3000/api/getallbrand").then(result=>{
+                    this.$http.get("api/getallbrand").then(result=>{
                         //通过this.$http获取的数据 都在result.body中放着
                         var info = result.body;
                         if(info.success ==0)
@@ -72,12 +78,35 @@
                     });
                }, 
                add(){
-                    this.$http.post("http://localhost:3000/api/addbrand",{name:this.name},{emulateJSON:true}).then(result=>{
-
+                    // this.$http.post("api/addbrand",{name:this.name},{emulateJSON:true}).then(result=>{
+                    //     var info = result.body;
+                    //     if(info.success ==0)
+                    //     {
+                    //         this.getAllList();
+                    //     }else{
+                    //         console.log("添加失败！")
+                    //     }   
+                    // });
+                    this.$http.post("api/addbrand",{name:this.name}).then(result=>{
+                        var info = result.body;
+                        if(info.success ==0)
+                        {
+                            this.getAllList();
+                        }else{
+                            console.log("添加失败！")
+                        }   
                     });
                },
-               del(i){
-
+               del(id){
+                this.$http.post("api/delbrand",{delid:id},{emulateJSON:true}).then(result=>{
+                        var info = result.body;
+                        if(info.success ==0)
+                        {
+                            this.getAllList();
+                        }else{
+                            console.log("删除失败！")
+                        }   
+                    }); 
                }
             },
             created() { //vm实例的data和methods初始化完成，vm实例会自动执行created这个生命周期函数
