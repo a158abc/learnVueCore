@@ -27,6 +27,9 @@
                     if(this.intervalId==null)
                     {
                         this.intervalId = setInterval( ()=> {
+                            // stringObject.substring(start,stop) 
+                            // start 必需。一个非负的整数，规定要提取的子串的第一个字符在 stringObject 中的位置。
+                            // stop 如果省略该参数，那么返回的子串会一直到字符串的结尾。
                             this.msg =  this.msg.substring(1)+this.msg.substring(0,1)
                         },500);
                     }

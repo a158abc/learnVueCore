@@ -25,13 +25,13 @@
         Vue.directive("focus",{
             bind:function(el) { //每当指令绑定到元素上的时候，会立即执行这个bind函数，只执行一次
                 //注意：在每个 函数中，第一个参数 永远是el，表示 被绑定了指令的那个元素，这个el参数，是一个原生的js对象
-                // 在 元素 刚绑定了指令的时候，还没有插入到DOM中，这时候，调用focus方法没有作业
+                // 在 元素 刚绑定了指令的时候，还没有插入到DOM中，这时候，调用focus方法没有作用
                 // 因为 一个元素，只有插入DOM之后，才能获取焦点。
                 //el.focus();
             },
             inserted:function(el){ //表示元素插入DOM中的时候，执行inserted函数， 触发一次
                 el.focus(); // 获取焦点
-                //和JS行为相关的操作，最后在inserted中去执行，防止js行为不生效
+                //和JS行为相关的操作，最好在inserted中去执行，防止js行为不生效
             },
             updated:function(el){ // 当vnode 更新的时候，会执行updated，可能执行多次
 

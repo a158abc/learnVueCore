@@ -49,8 +49,8 @@
 
 
     <script>
-        //如果我们通过全局配置，请求的数据接口 根路径 则每次发起http请求，请求的路径url 应该以相对路径开头
-        // 前面不带 / 否则会启动根路径做拼接
+        //如果我们通过全局配置，请求的数据接口 根路径 则每次发起http请求，
+        //请求的路径url 应该以相对路径开头 前面不带 / 否则会启动根路径做拼接
         Vue.http.options.root="http://localhost:3000/";
 
         Vue.http.options.emulateJSON = true;

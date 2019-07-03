@@ -46,6 +46,7 @@
 
                     // 注意 巧用了eval函数，现实开发中少用此方法
                     var  codeStr = "parseInt(this.d1)"+this.opt + parseInt(this.d2);
+                    //eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。
                     this.result = eval(codeStr);
 
                 }
