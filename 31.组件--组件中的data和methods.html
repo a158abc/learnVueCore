@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 告诉IE浏览器，IE8/9及以后的版本都会以最高版本IE来渲染页面。  -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+</head>
+
+<body>
+    <div id="app1">
+        <my-com></my-com>
+        <br>
+
+        <counter></counter>
+        <hr>
+        <counter></counter>
+        <hr>
+        <counter></counter>
+        <hr>
+    </div>
+
+
+    <!-- 注意：在被控制#app外面，使用template元素，定义组件的html模板 -->
+    <template id="tmp1">
+            <div>
+                <h3>组件</h3>
+                <span>{{msg}}</span>
+            </div>
+    </template>
+
+    <template id="tmp2">
+            <div>
+                <input type="button" value="+1" @click="increase">
+                <h3>{{count}}</h3>
+            </div>
+    </template>
+
+
+
+
+    <script>
+        // 组件可以有自己的data数据
+        // 组件的data和实例的data有些不一样，实例中的data可以为一个对象，但组件中的data只能是一个function
+        // 组件的data除了必须是function，还必须有返回一个对象
+        // 组件中的data使用和实例的data使用完全一样
+        Vue.component("myCom",{
+            template:"#tmp1" ,
+            data:function(){
+                    return {
+                        msg:"这是组件中的msg"
+                    }
+            }
+        });
+
+       // var dataObj={ count: 0 }
+        Vue.component("counter",{
+            template:"#tmp2" ,
+            data:function(){
+                //return  dataObj
+                return  { count: 0 }
+            },
+            methods:{
+                increase(){
+                    this.count++;
+                }
+            }
+        });
+        
+
+        var vm1 = new Vue({
+            el: "#app1",
+            data: {
+              
+            },
+            methods: {
+               
+            }
+        });
+
+       
+
+
+    </script>
+</body>
+
+</html>

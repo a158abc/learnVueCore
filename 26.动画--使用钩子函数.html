@@ -35,20 +35,34 @@
     var vm = new Vue({
         el:"#app",
         data:{
-            flag:true
+            flag:false
         },
         methods: {
+            //注意：动画钩子函数的第一个参数：el 表示要执行动画的那个DOM元素，是一个JS DOM 对象
+            // 可以认为： el是通过document.getElementById('')方式获取到的原生JS DOM对象
             beforeEnter(el)
-            {
-                el.style.translate = 'transtion(0,0)';
+            {  //beforeEnter 表示动画开场之前，此时动画还没有开始，
+                //可以在beforeEnter中设置元素的开始动画之前的起始样式
+                //设置小球开始动画之前，起始位置
+                el.style.transform = 'translate(0,0)';
             },
-            enter(el)
+            enter(el,done) 
             {
+                // 这句话，没有实际作用，如果不写，没有实际动画效果
+                // 可以认为，el.offsetWidth会强制动画刷新
+                el.offsetWidth;
+                //enter表示动画开始之后的样式，这里，可以设置小球完成动画之后的 结束状态
+                el.style.transform = 'translate(150px,450px)';
+                el.style.transition = ' all 1s ease';
 
+                //这里的done,其实就是afterEnter这个函数，也就是说，done就是afterEnter函数的引用
+                done();
             },
             afterEnter(el)
             {
-
+                //动画完成之后  会调用afterenter
+                console.log('ok');
+                this.flag = !this.flag;
             }
         },
     });
