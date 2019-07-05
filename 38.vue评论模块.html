@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 告诉IE浏览器，IE8/9及以后的版本都会以最高版本IE来渲染页面。  -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./lib/vue.js"></script>
+    <link rel="stylesheet" href="./lib/bootstrap.css" />
+    <style>
+        #app{
+            padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <com1 @getsonitem="getNewItem"></com1>
+
+        <ul class="list-group">
+            <li class="list-group-item"  v-for="item in list" :key="item.id">
+                <span class="badge"> 评论人：{{item.name}}</span>
+                {{item.content}}
+            </li>
+        </ul>
+    </div>
+
+    <template id="temp1">
+        <div>
+           <div class="form-group">
+            <label>评论人：</label>
+            <input type="text"  class="form-control" v-model="name">
+
+            <label>评论内容：</label>
+            <textarea name="" id="input" class="form-control" rows="3" v-model="content"></textarea>
+
+            <input type="button" value="添加" @click="addPl" class="btn btn-primary" >
+           </div>
+        </div>
+    </template>
+
+
+    <script>
+
+        var com1 = {
+            data(){
+                return {
+                    name:"",
+                    content:""
+                }
+            },
+            template:"#temp1",
+            methods: {
+                addPl(){
+                    var item={id:(new Date()).toString(),name:this.name,content:this.content};
+                    // 从localStorage中获取的所有评论
+                    var list = JSON.parse(localStorage.getItem("setItem")||'[]') ;
+                    list.unshift(item);
+                    localStorage.setItem("setItem",JSON.stringify(list));
+                    //this.$emit("getsonitem",item);
+                }
+            },
+        }
+
+        var vm = new Vue({
+            el: "#app",
+            data: {
+                list:[{id:"1",name:"小明",content:"好好学习，天天向上"},
+                {id:"2",name:"小李",content:"我爱好学习java"},
+                {id:"3",name:"小黄",content:"我在学习spring"},
+                {id:"4",name:"小杨",content:"我在学习vue"}]
+            },
+            methods: {
+                getNewItem(data)
+                {
+                    this.list.push(data);
+                }
+            },
+            components:{
+                com1
+            }
+        
+        });
+
+       
+
+
+    </script>
+</body>
+
+</html>

@@ -14,7 +14,7 @@
 <body>
     <div id="app">
           <!-- 父组件 向子组件传递方法，使用的是 事件绑定机制， v-on， 当我们定义一个事件属性后，那么 子组件就能够通过某些方式，调用传递进来的这个方法-->
-            <com1 v-bind:parentmsg="msg" @showfunc="show"></com1>
+            <com1 :parentmsg="msg" @showfunc="show"></com1>
     </div>
 
     <template id="temp1">
